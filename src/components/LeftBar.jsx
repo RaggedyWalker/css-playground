@@ -1,9 +1,8 @@
-import { IoHome } from "react-icons/io5";
-import { MdOutlineContactSupport } from "react-icons/md";
 import { GoSidebarCollapse } from "react-icons/go";
 import { useState } from "react";
-import { BiCubeAlt } from "react-icons/bi";
 import { motion } from "framer-motion";
+import { routeList } from "../config/menuList";
+import { Link } from "../plugins/router/link";
 
 function LeftBar() {
   const [collapse, setCollapse] = useState(false);
@@ -14,9 +13,9 @@ function LeftBar() {
   return (
     <motion.div className="leftBar bg-orange-200/10 px-6" layout>
       <ul className="flex flex-col gap-4 mt-10">
-        <NavItem collapse={collapse} title="Home" icon={<IoHome/>}></NavItem>
-        <NavItem collapse={collapse} title="About" icon={<BiCubeAlt/>}></NavItem>
-        <NavItem collapse={collapse} title="Contact" icon={<MdOutlineContactSupport/>}></NavItem>
+        {routeList.map((route, index) => (
+          <NavItem key={index} collapse={collapse} route={route}></NavItem>
+        ))}
       </ul>
 
       <GoSidebarCollapse
@@ -29,11 +28,23 @@ function LeftBar() {
 
 export default LeftBar;
 
-function NavItem({ collapse, icon, title }) {
+function NavItem({ collapse, route }) {
   return (
     <motion.li className="flex items-center gap-2" layout transition={{}}>
-      <motion.span layout className="max-w-min bg-yellow-800 p-2 rounded-full">{icon}</motion.span>
-      <motion.span  className={collapse ? "hidden" : ""} animate={{opacity: collapse ? 0:1}}>{title}</motion.span>
+      <Link to={route.path}>
+        <motion.span
+          layout
+          className="max-w-min bg-yellow-800 p-2 rounded-full"
+        >
+          {route.icon}
+        </motion.span>
+        <motion.span
+          className={collapse ? "hidden" : ""}
+          animate={{ opacity: collapse ? 0 : 1 }}
+        >
+          {route.title}
+        </motion.span>
+      </Link>
     </motion.li>
   );
 }
